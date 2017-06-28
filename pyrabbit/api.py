@@ -68,8 +68,9 @@ class Client(object):
             'vhost_permissions': 'permissions/%s/%s',
             'users_by_name': 'users/%s',
             'user_permissions': 'users/%s/permissions',
-            'vhost_permissions_get': 'vhosts/%s/permissions'
-            }
+            'vhost_permissions_get': 'vhosts/%s/permissions',
+            'shovel': 'parameters/shovel/%s/%s',
+    }
 
     json_headers = {"content-type": "application/json"}
 
@@ -113,6 +114,55 @@ class Client(object):
             raise
         return resp
 
+    def get_shovel(self, vhost, shovel_name):
+        """
+        Create a shovel on a given vhost.
+
+        :param string vhost: vhost housing the exchange/queue to bind
+        :param string shovel_name: the target exchange of the binding
+        :returns: boolean
+        """
+        vhost = quote(vhost, '')
+        shovel_name = quote(shovel_name, '')
+        path = Client.urls['shovel'] % (vhost, shovel_name)
+        shovel = self._call(path, 'GET')
+        return shovel
+
+    def delete_shovel(self, vhost, shovel_name):
+        """
+        Delete shovel by vhost and shovel_name.
+
+        :param string vhost: vhost housing the shovel
+        :param string shovel_name: deleting shovel name
+        :returns: boolean
+        """
+        vhost = quote(vhost, '')
+        shovel_name = quote(shovel_name, '')
+        path = Client.urls['shovel'] % (vhost, shovel_name)
+        shovel = self._call(path, 'DELETE')
+        return shovel
+
+    def create_shovel(self, vhost, shovel_name, source_uri, destination_uri, source, destination):
+        """
+        Create shovel. https://www.rabbitmq.com/shovel-dynamic.html
+
+        :param string vhost: shovel's vhost
+        :param string shovel_name: name shovel
+        :param string source_uri: source URI RMQ server example amqp://user:password@127.0.0.1:5672
+        :param string destination_uri: destination URI RMQ server example amqp://user:password@127.0.0.1:5672
+        :param string source_queue: source queue or exchange. If you use exchange use routing key example  {"src-queue": queue_name} 
+        :param string destination: source queue or exchange. If you use exchange use routing key example  {"dest-queue": queue_name}
+        :returns: boolean
+        """
+        params = {"value": {"src-uri": source_uri, "dest-uri":destination_uri}}
+        params["value"].update(source)
+        params["value"].update(destination)
+        vhost = quote(vhost, '')
+        shovel_name = quote(shovel_name, '')
+        body = json.dumps(params)
+        path = Client.urls['shovel'] % (vhost, shovel_name)
+        shovel = self._call(path, 'PUT', body=body, headers=Client.json_headers)
+        return shovel
 
     def is_alive(self, vhost='%2F'):
         """
