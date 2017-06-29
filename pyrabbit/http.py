@@ -66,7 +66,7 @@ class HTTPClient(object):
         """
         self.auth = HTTPBasicAuth(uname, passwd)
         self.timeout = timeout
-        api_url = '%s://%s' % (scheme, api_url)
+        api_url = '%s://%s/api/' % (scheme, api_url)
         self.base_url = api_url
 
     def do_call(self, path, method, body=None, headers=None):

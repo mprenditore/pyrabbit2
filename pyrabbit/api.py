@@ -142,7 +142,7 @@ class Client(object):
         shovel = self._call(path, 'DELETE')
         return shovel
 
-    def create_shovel(self, vhost, shovel_name, source_uri, destination_uri, source, destination):
+    def create_shovel(self, vhost, shovel_name, source_uri, destination_uri, source, destination, **kwargs):
         """
         Create shovel. https://www.rabbitmq.com/shovel-dynamic.html
 
@@ -151,12 +151,13 @@ class Client(object):
         :param string source_uri: source URI RMQ server example amqp://user:password@127.0.0.1:5672
         :param string destination_uri: destination URI RMQ server example amqp://user:password@127.0.0.1:5672
         :param string source_queue: source queue or exchange. If you use exchange use routing key example  {"src-queue": queue_name} 
-        :param string destination: source queue or exchange. If you use exchange use routing key example  {"dest-queue": queue_name}
+        :param dict destination: source queue or exchange. If you use exchange use routing key example  {"dest-queue": queue_name}
         :returns: boolean
         """
         params = {"value": {"src-uri": source_uri, "dest-uri":destination_uri}}
         params["value"].update(source)
         params["value"].update(destination)
+        params["value"].update(kwargs)
         vhost = quote(vhost, '')
         shovel_name = quote(shovel_name, '')
         body = json.dumps(params)
