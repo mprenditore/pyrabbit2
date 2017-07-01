@@ -70,6 +70,7 @@ class Client(object):
             'user_permissions': 'users/%s/permissions',
             'vhost_permissions_get': 'vhosts/%s/permissions',
             'shovel': 'parameters/shovel/%s/%s',
+            'all_shovels':  'parameters/shovel',
     }
 
     json_headers = {"content-type": "application/json"}
@@ -118,8 +119,8 @@ class Client(object):
         """
         Create a shovel on a given vhost.
 
-        :param string vhost: vhost housing the exchange/queue to bind
-        :param string shovel_name: the target exchange of the binding
+        :param string vhost: virtual host where working shovel 
+        :param string shovel_name: shovel name
         :returns: boolean
         """
         vhost = quote(vhost, '')
@@ -128,11 +129,22 @@ class Client(object):
         shovel = self._call(path, 'GET')
         return shovel
 
+    def get_all_shovels(self):
+        """
+        Get all shovels on a given server.
+        :returns: list all shovels
+        """
+        path = Client.urls['all_shovels']
+        shovel = self._call(path, 'GET')
+        if not shovel:
+            shovel = list()
+        return shovel
+
     def delete_shovel(self, vhost, shovel_name):
         """
         Delete shovel by vhost and shovel_name.
 
-        :param string vhost: vhost housing the shovel
+        :param string vhost: vhost hosing the shovel
         :param string shovel_name: deleting shovel name
         :returns: boolean
         """
@@ -142,22 +154,17 @@ class Client(object):
         shovel = self._call(path, 'DELETE')
         return shovel
 
-    def create_shovel(self, vhost, shovel_name, source_uri, destination_uri, source, destination, **kwargs):
+    def create_shovel(self, vhost, shovel_name, **kwargs):
         """
         Create shovel. https://www.rabbitmq.com/shovel-dynamic.html
 
         :param string vhost: shovel's vhost
         :param string shovel_name: name shovel
-        :param string source_uri: source URI RMQ server example amqp://user:password@127.0.0.1:5672
-        :param string destination_uri: destination URI RMQ server example amqp://user:password@127.0.0.1:5672
-        :param string source_queue: source queue or exchange. If you use exchange use routing key example  {"src-queue": queue_name} 
-        :param dict destination: source queue or exchange. If you use exchange use routing key example  {"dest-queue": queue_name}
+        :params dict shovel params 
+        example {"src-uri":"amqp://admin:admin@rabbit.test.com:5672","src-queue":"test_queue","dest-uri":"amqp://test1:test1@rabbit2.test.com:5672","dest-queue":"test_queue","prefetch-count":500,"reconnect-delay":1,"add-forward-headers":false,"ack-mode":"on-confirm","delete-after":"never"}
         :returns: boolean
         """
-        params = {"value": {"src-uri": source_uri, "dest-uri":destination_uri}}
-        params["value"].update(source)
-        params["value"].update(destination)
-        params["value"].update(kwargs)
+        params = {"value": kwargs}
         vhost = quote(vhost, '')
         shovel_name = quote(shovel_name, '')
         body = json.dumps(params)
@@ -828,17 +835,17 @@ class Client(object):
                                                                 rt_key)
         return self._call(path, 'DELETE', headers=Client.json_headers)
 
-    def create_user(self, username, password, tags=""):
+    def create_user(self, username, password_hash, tags=""):
         """
         Creates a user.
 
         :param string username: The name to give to the new user
-        :param string password: Password for the new user
+        :param string password: Password for the new user sha256 with salt see more http://www.rabbitmq.com/passwords.html#password-generation
         :param string tags: Comma-separated list of tags for the user
         :returns: boolean
         """
         path = Client.urls['users_by_name'] % username
-        body = json.dumps({'password': password, 'tags': tags})
+        body = json.dumps({'password_hash': password_hash, 'tags': tags})
         return self._call(path, 'PUT', body=body,
                                  headers=Client.json_headers)
 
