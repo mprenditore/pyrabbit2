@@ -12,7 +12,7 @@ except ImportError:
 import sys
 import requests
 sys.path.append('..')
-import pyrabbit
+import pyrabbit2
 from mock import Mock, patch
 
 class TestClient(unittest.TestCase):
