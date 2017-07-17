@@ -162,7 +162,7 @@ class Client(object):
         :param string shovel_name: name shovel
         :params dict shovel params 
         example {"src-uri":"amqp://admin:admin@rabbit.test.com:5672","src-queue":"test_queue","dest-uri":"amqp://test1:test1@rabbit2.test.com:5672","dest-queue":"test_queue","prefetch-count":500,"reconnect-delay":1,"add-forward-headers":false,"ack-mode":"on-confirm","delete-after":"never"}
-        :returns: boolean
+        :returns: http_code
         """
         params = {"value": kwargs}
         vhost = quote(vhost, '')
