@@ -269,4 +269,4 @@ class TestLiveServer(unittest.TestCase):
 
 if __name__ == "__main__":
     log = open('test_out.log', 'w')
-    unittest.main(testRunner=unittest.TextTestRunner(log))
+    unittest.main(testRunner=unittest.TextTestRunner())
