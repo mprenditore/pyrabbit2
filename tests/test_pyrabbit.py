@@ -268,7 +268,7 @@ class TestLiveServer(unittest.TestCase):
 class TestShovel(unittest.TestCase):
 
     def setUp(self):
-        self.rabbit = pyrabbit2.api.Client('localhost:15672/api', 'guest', 'guest')
+        self.rabbit = pyrabbit2.api.Client('localhost:15672', 'guest', 'guest')
         self.vhost_name = '/'
         self.exchange_name = 'pyrabbit_test_exchange'
         self.queue_name = 'pyrabbit_test_queue'
