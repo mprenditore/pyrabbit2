@@ -196,12 +196,12 @@ class TestClient(unittest.TestCase):
             self.assertTrue(self.client.is_alive())
 
     def test_definitions(self):
-        def_result = self.rabbit.get_definitions()
+        def_result = self.client.get_definitions()
         self.assertIsInstance(def_result, dict)
         self.assertNotEqual(def_result.get("rabbit_version", 0), 0)
 
     def test_extensions(self):
-        ext_result = self.rabbit.get_extensions()
+        ext_result = self.client.get_extensions()
         self.assertIsInstance(ext_result, list)
         self.assertIsInstance(ext_result[0], dict)
 
