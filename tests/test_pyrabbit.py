@@ -205,6 +205,14 @@ class TestClient(unittest.TestCase):
         self.assertIsInstance(ext_result, list)
         self.assertIsInstance(ext_result[0], dict)
 
+    def test_aliveness(self):
+        result = self.client.get_aliveness("/")
+        self.assertEqual(result, {"status":"ok"})
+
+    def test_empty_aliveness(self):
+        result = self.client.get_aliveness()
+        self.assertEqual(result, {"status":"ok"})
+
 
 class TestLiveServer(unittest.TestCase):
     def setUp(self):
