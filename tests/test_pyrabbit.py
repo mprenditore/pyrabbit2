@@ -266,8 +266,7 @@ class TestLiveServer(unittest.TestCase):
         self.rabbit.delete_vhost(self.vhost_name)
 
         def_result = self.rabbit.get_definitions()
-        self.assertIsInstance(def_result, list)
-        self.assertIsInstance(def_result[0], dict)
+        self.assertIsInstance(def_result, dict)
 
         ext_result = self.rabbit.get_extensions()
         self.assertIsInstance(ext_result, list)
