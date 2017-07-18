@@ -21,4 +21,6 @@ install:
   - if [[ $TRAVIS_PYTHON_VERSION != '2.7' ]]; then pip install -r requirements3.txt; fi
   - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then pip install -r requirements.txt; fi
   - cd tests
-script: python3 test_pyrabbit.py
+script: 
+  - if [[ $TRAVIS_PYTHON_VERSION != '2.7' ]]; python3 test_pyrabbit.py; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; python test_pyrabbit.py; fi
