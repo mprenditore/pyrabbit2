@@ -17,6 +17,7 @@ from mock import Mock, patch
 
 class TestClient(unittest.TestCase):
     def setUp(self):
+        print(dir(pyrabbit2))
         self.client = pyrabbit2.api.Client('localhost:55672', 'guest', 'guest')
 
     def tearDown(self):
