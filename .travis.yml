@@ -16,8 +16,9 @@ before_install:
  - sudo rabbitmqctl set_permissions -p / test \".*\" \".*\" \".*\"
  - sudo rabbitmq-plugins enable rabbitmq_shovel
  - chmod +x tests/test_pyrabbit.py
+ - cd tests
     
 install:
   - if [[ $TRAVIS_PYTHON_VERSION != '2.7' ]]; then pip install -r requirements3.txt; fi
   - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then pip install -r requirements.txt; fi
-script: python3 tests/test_pyrabbit.py
+script: python3 test_pyrabbit.py
