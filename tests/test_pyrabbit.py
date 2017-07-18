@@ -267,6 +267,7 @@ class TestLiveServer(unittest.TestCase):
 
         def_result = self.rabbit.get_definitions()
         self.assertIsInstance(def_result, dict)
+        self.assertNotEqual(def_result.get("rabbit_version", 0), 0)
 
         ext_result = self.rabbit.get_extensions()
         self.assertIsInstance(ext_result, list)
