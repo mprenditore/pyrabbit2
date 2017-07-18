@@ -204,6 +204,12 @@ class TestClient(unittest.TestCase):
         ext_result = self.client.get_extensions()
         self.assertIsInstance(ext_result, list)
         self.assertIsInstance(ext_result[0], dict)
+
+    def test_get_cluster_name(self):
+        result = self.client.test_get_cluster_name()
+        self.assertIsInstance(result, dict)
+        self.assertNotEqual(result.get("name", 0), 0)
+        
         
 
 class TestLiveServer(unittest.TestCase):

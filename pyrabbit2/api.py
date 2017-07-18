@@ -73,6 +73,7 @@ class Client(object):
             'all_shovels':  'parameters/shovel',
             'definitions': 'definitions',
             'extensions': 'extensions',
+            'cluster-name': 'cluster-name',
     }
 
     json_headers = {"content-type": "application/json"}
@@ -877,4 +878,12 @@ class Client(object):
         :return: list dicts Example: [{"javascript":"tracing.js"},{"javascript":"shovel.js"},{"javascript":"dispatcher.js"}]
         """
         path = Client.urls['extensions']
+        return self._call(path, 'GET')
+
+
+    def get_cluster_name(self):
+        """
+        Name identifying this RabbitMQ cluster.
+        """
+        path = Client.urls['cluster-name']
         return self._call(path, 'GET')
