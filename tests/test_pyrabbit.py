@@ -268,13 +268,13 @@ class TestLiveServer(unittest.TestCase):
 class TestShovel(unittest.TestCase):
 
     def setUp(self):
-        self.rabbit = pyrabbit2.api.Client('localhost:15672/api', 'login', '')
+        self.rabbit = pyrabbit2.api.Client('localhost:15672/api', 'guest', 'guest')
         self.vhost_name = '/'
         self.exchange_name = 'pyrabbit_test_exchange'
         self.queue_name = 'pyrabbit_test_queue'
         self.rt_key = 'pyrabbit-roundtrip'
         self.payload = 'pyrabbit test message payload'
-        self.user = 'bigboss'
+        self.user = 'guest'
         self.shovel_name = 'pyrabbit2_test_shovel'
 
     def tearDown(self):
