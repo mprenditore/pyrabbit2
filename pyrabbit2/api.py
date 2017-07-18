@@ -73,7 +73,6 @@ class Client(object):
             'all_shovels':  'parameters/shovel',
             'definitions': 'definitions',
             'extensions': 'extensions',
-            "aliveness": "aliveness-test/%s",
     }
 
     json_headers = {"content-type": "application/json"}
@@ -878,16 +877,4 @@ class Client(object):
         :return: list dicts Example: [{"javascript":"tracing.js"},{"javascript":"shovel.js"},{"javascript":"dispatcher.js"}]
         """
         path = Client.urls['extensions']
-        return self._call(path, 'GET')
-
-
-    def get_aliveness(self, vhost = "/"):
-        """
-        Declares a test queue, then publishes and consumes a message. Intended for use by monitoring tools. If everything is working correctly,
-        will return HTTP status 200 with body:
-
-        {"status":"ok"}
-        """
-        vhost = quote(vhost, '')
-        path = Client.urls['extensions']%vhost
         return self._call(path, 'GET')
