@@ -259,7 +259,7 @@ class TestLiveServer(unittest.TestCase):
         self.rabbit.publish(self.vhost_name, self.exchange_name, self.rt_key,
                             self.payload)
         messages = self.rabbit.get_messages(self.vhost_name, self.queue_name)
-        self.assertIsNone(messages)
+        self.assertIsInstance(messages, int)
 
         # Clean up.
         self.rabbit.delete_exchange(self.vhost_name, self.exchange_name)
