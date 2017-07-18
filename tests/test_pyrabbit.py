@@ -265,6 +265,15 @@ class TestLiveServer(unittest.TestCase):
         self.rabbit.delete_exchange(self.vhost_name, self.exchange_name)
         self.rabbit.delete_vhost(self.vhost_name)
 
+        def_result = self.rabbit.get_definitions()
+        self.assertIsInstance(def_result, list)
+        self.assertIsInstance(def_result[0], dict)
+
+        ext_result = self.rabbit.get_extensions()
+        self.assertIsInstance(ext_result, list)
+        self.assertIsInstance(ext_result[0], dict)
+
+
 class TestShovel(unittest.TestCase):
 
     def setUp(self):
