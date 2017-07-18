@@ -17,14 +17,14 @@ from mock import Mock, patch
 
 class TestClient(unittest.TestCase):
     def setUp(self):
-        self.client = pyrabbit2.api.Client('localhost:55672', 'guest', 'guest')
+        self.client = pyrabbit2.api.Client('localhost:15672', 'guest', 'guest')
 
     def tearDown(self):
         del self.client
 
     def test_server_init_200(self):
         self.assertIsInstance(self.client, pyrabbit2.api.Client)
-        self.assertEqual(self.client.api_url, 'localhost:55672/api')
+        self.assertEqual(self.client.api_url, 'localhost:15672')
 
     def test_server_is_alive_default_vhost(self):
         response = {'status': 'ok'}
@@ -76,7 +76,7 @@ class TestClient(unittest.TestCase):
         self.assertEqual(myexch['name'], 'foo')
 
     def test_get_users(self):
-        with patch('pyrabbit.http.HTTPClient.do_call') as do_call:
+        with patch('pyrabbit2.http.HTTPClient.do_call') as do_call:
             self.assertTrue(self.client.get_users())
 
     def test_get_queue_depth(self):
@@ -268,5 +268,4 @@ class TestLiveServer(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    log = open('test_out.log', 'w')
     unittest.main(testRunner=unittest.TextTestRunner())
