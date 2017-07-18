@@ -195,6 +195,16 @@ class TestClient(unittest.TestCase):
             do_call.return_value = {'status': 'ok'}
             self.assertTrue(self.client.is_alive())
 
+    def test_definitions(self):
+        def_result = self.rabbit.get_definitions()
+        self.assertIsInstance(def_result, dict)
+        self.assertNotEqual(def_result.get("rabbit_version", 0), 0)
+
+    def test_extensions(self):
+        ext_result = self.rabbit.get_extensions()
+        self.assertIsInstance(ext_result, list)
+        self.assertIsInstance(ext_result[0], dict)
+
 
 class TestLiveServer(unittest.TestCase):
     def setUp(self):
@@ -264,14 +274,6 @@ class TestLiveServer(unittest.TestCase):
         # Clean up.
         self.rabbit.delete_exchange(self.vhost_name, self.exchange_name)
         self.rabbit.delete_vhost(self.vhost_name)
-
-        def_result = self.rabbit.get_definitions()
-        self.assertIsInstance(def_result, dict)
-        self.assertNotEqual(def_result.get("rabbit_version", 0), 0)
-
-        ext_result = self.rabbit.get_extensions()
-        self.assertIsInstance(ext_result, list)
-        self.assertIsInstance(ext_result[0], dict)
 
 
 class TestShovel(unittest.TestCase):
