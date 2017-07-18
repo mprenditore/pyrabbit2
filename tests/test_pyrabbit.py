@@ -191,7 +191,7 @@ class TestClient(unittest.TestCase):
         self.assertTrue(self.client.get_permission('vname', 'username'))
 
     def test_is_alive(self):
-        with patch('pyrabbit.http.HTTPClient.do_call') as do_call:
+        with patch('pyrabbit2.http.HTTPClient.do_call') as do_call:
             do_call.return_value = {'status': 'ok'}
             self.assertTrue(self.client.is_alive())
 
