@@ -104,4 +104,4 @@ class HTTPClient(object):
             if content:
                 return content
             else:
-                return None
+                return resp.status_code

@@ -196,7 +196,6 @@ class TestClient(unittest.TestCase):
             self.assertTrue(self.client.is_alive())
 
 
-@unittest.skip
 class TestLiveServer(unittest.TestCase):
     def setUp(self):
         self.rabbit = pyrabbit2.api.Client('localhost:15672', 'guest', 'guest')
@@ -266,6 +265,58 @@ class TestLiveServer(unittest.TestCase):
         self.rabbit.delete_exchange(self.vhost_name, self.exchange_name)
         self.rabbit.delete_vhost(self.vhost_name)
 
+class TestShovel(unittest.TestCase):
+
+    def setUp(self):
+        self.rabbit = pyrabbit2.api.Client('localhost:15672/api', 'login', '')
+        self.vhost_name = '/'
+        self.exchange_name = 'pyrabbit_test_exchange'
+        self.queue_name = 'pyrabbit_test_queue'
+        self.rt_key = 'pyrabbit-roundtrip'
+        self.payload = 'pyrabbit test message payload'
+        self.user = 'bigboss'
+        self.shovel_name = 'pyrabbit2_test_shovel'
+
+    def tearDown(self):
+        del self.rabbit
+
+    def test_create_shovel(self):
+        kwargs = {}
+        kwargs['src-uri'] = 'amqp://admin:admin@rabbit.test.com:5672'
+        kwargs['src-queue'] = 'test_queue'
+        kwargs['dest-uri'] = 'amqp://test1:test1@rabbit2.test.com:5672'
+        kwargs['dest-queue'] = 'test_queue'
+        kwargs['prefetch-count'] = 500
+        kwargs['reconnect-delay'] = 1
+        kwargs['add-forward-headers'] = False
+        kwargs['ack-mode'] = 'on-confirm'
+        kwargs['delete-after'] = 'never'
+        self.assertIsInstance(self.rabbit.create_shovel(self.vhost_name, self.shovel_name, **kwargs), int)
+
+    def test_get_shovel(self):
+        shovel = self.rabbit.get_shovel(self.vhost_name, self.shovel_name)
+        self.assertEqual(shovel['name'], self.shovel_name)
+
+    def test_get_all_shovels(self):
+        shovel = self.rabbit.get_all_shovels().pop()
+        self.assertEqual(shovel['name'], self.shovel_name)
+
+    def test_update_shovel(self):
+        kwargs = {}
+        kwargs['src-uri'] = 'amqp://admin:admin@rabbit.test.com:15672'
+        kwargs['src-queue'] = 'test'
+        kwargs['dest-uri'] = 'amqp://test1:test1@rabbit2.test.com:15672'
+        kwargs['dest-queue'] = 'test'
+        kwargs['prefetch-count'] = 250
+        kwargs['reconnect-delay'] = 100
+        kwargs['add-forward-headers'] = True
+        kwargs['ack-mode'] = 'on-confirm'
+        kwargs['delete-after'] = 'never'
+        self.assertIsInstance(self.rabbit.create_shovel(self.vhost_name, self.shovel_name, **kwargs), int)        
+
+    def test_xdelete_shovel(self):
+        result = self.rabbit.delete_shovel(self.vhost_name, self.shovel_name)
+        self.assertIsInstance(result, int)
 
 if __name__ == "__main__":
     unittest.main(testRunner=unittest.TextTestRunner())
