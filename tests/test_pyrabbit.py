@@ -17,14 +17,13 @@ from mock import Mock, patch
 
 class TestClient(unittest.TestCase):
     def setUp(self):
-        print(dir(pyrabbit2))
         self.client = pyrabbit2.api.Client('localhost:55672', 'guest', 'guest')
 
     def tearDown(self):
         del self.client
 
     def test_server_init_200(self):
-        self.assertIsInstance(self.client, pyrabbit.api.Client)
+        self.assertIsInstance(self.client, pyrabbit2.api.Client)
         self.assertEqual(self.client.api_url, 'localhost:55672/api')
 
     def test_server_is_alive_default_vhost(self):
