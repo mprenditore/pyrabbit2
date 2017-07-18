@@ -8,6 +8,8 @@ setup(name='pyrabbit2',
 
       long_description="""\
 
+Fork module to communicate the RabbitMQ HTTP Management API https://github.com/bkjones/pyrabbit
+
 The main documentation lives at http://pyrabbit.readthedocs.org
 
 There's no way to easily write programs against RabbitMQs management API
@@ -31,10 +33,10 @@ data that lives inside of RabbitMQ, and manipulate the resources there.""",
           ],
       keywords='python http amqp rabbit rabbitmq management',
       install_requires = ['requests'],
-      author='Brian K. Jones',
-      author_email='bkjones@gmail.com',
-      url='http://www.github.com/bkjones/pyrabbit',
-      download_url='http://www.github.com/bkjones/pyrabbit',
+      author='Brian K. Jones, Yuri Bukatkin',
+      author_email='bkjones@gmail.com, windowod@gmail.com',
+      url='https://github.com/deslum/pyrabbit2',
+      download_url='https://github.com/deslum/pyrabbit2/archive/master.zip',
       license='MIT',
       packages=find_packages(exclude='tests'),
       include_package_data=False,
