@@ -71,6 +71,9 @@ class Client(object):
             'vhost_permissions_get': 'vhosts/%s/permissions',
             'shovel': 'parameters/shovel/%s/%s',
             'all_shovels':  'parameters/shovel',
+            'definitions': 'definitions',
+            'extensions': 'extensions',
+            'cluster-name': 'cluster-name',
     }
 
     json_headers = {"content-type": "application/json"}
@@ -857,3 +860,30 @@ class Client(object):
         """
         path = Client.urls['users_by_name'] % username
         return self._call(path, 'DELETE')
+
+
+    def get_definitions(self):
+        """
+        The server definitions - exchanges, queues, bindings, users, virtual hosts, permissions and parameters.
+
+        :return: list dicts
+        """
+        path = Client.urls['definitions']
+        return self._call(path, 'GET')
+
+
+    def get_extensions(self):
+        """
+        A list of extensions to the management plugin.        
+        :return: list dicts Example: [{"javascript":"tracing.js"},{"javascript":"shovel.js"},{"javascript":"dispatcher.js"}]
+        """
+        path = Client.urls['extensions']
+        return self._call(path, 'GET')
+
+
+    def get_cluster_name(self):
+        """
+        Name identifying this RabbitMQ cluster.
+        """
+        path = Client.urls['cluster-name']
+        return self._call(path, 'GET')

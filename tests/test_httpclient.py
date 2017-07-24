@@ -36,3 +36,5 @@ class TestHTTPClient(unittest.TestCase):
         c = http.HTTPClient(self.testhost, self.testuser, self.testpass, 1)
         self.assertEqual(c.timeout, 1)
 
+if __name__ == "__main__":
+    unittest.main(testRunner=unittest.TextTestRunner())
