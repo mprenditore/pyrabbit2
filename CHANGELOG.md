@@ -3,7 +3,7 @@
 Features
   - Support shovel (Create, Read, Update, Delete)
   - Support users account SHA256 + salt (Create, Update, Move, Delete)
-  - For security not support plain text users passwords. 
+  - For security not support plain text users passwords. https://www.rabbitmq.com/passwords.html
   - Show names extensions on RMQ Servers
   - Show definitions
   
