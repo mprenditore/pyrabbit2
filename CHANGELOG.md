@@ -10,4 +10,4 @@ Features
 Tests
   - Add support Travis CI https://travis-ci.org/deslum/pyrabbit2
   - Add new unittests and modify old
-  - Testing API and HTTP modules in rabbit2
+  - Testing API and HTTP modules in pyrabbit2
