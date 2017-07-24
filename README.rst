@@ -3,8 +3,12 @@
 ==================
 PyRabbit2
 ==================
+.. _Python: http://www.python.org
+This project is fork project 
 
-This project is fork module to communicate the RabbitMQ HTTP Management API https://github.com/bkjones/pyrabbit
+.. _pyrabbit:: https://github.com/bkjones/pyrabbit 
+
+,because this is project don't update many years.
 
 Pyrabbit is a module to make it easy to interface w/ RabbitMQ's HTTP Management
 API.  It's tested against RabbitMQ 3.6.10 using Python 2.7-3.6. It has
