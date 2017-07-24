@@ -6,6 +6,7 @@ Features
   - For security not support plain text users passwords. 
   - Show names extensions on RMQ Servers
   - Show definitions
+  
 Tests
   - Add support Travis CI https://travis-ci.org/deslum/pyrabbit2
   - Add new unittests and modify old
