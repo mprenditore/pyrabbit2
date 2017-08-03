@@ -16,17 +16,17 @@ PyRabbit is on PyPI, which makes it installable using pip or easy_install.
 
 Support:
 
-   - Users (Create, Read, Update, Delete)
-   - User acess SHA256 + salt 
-   - Permissions
-   - Polices
-   - Vhosts (Create, Read, Update, Delete)
-   - Exchanges (Create, Read, Update, Delete)
-   - Bindings (Create, Read, Update, Delete)
-   - Queues (Create, Read, Update, Delete)
-   - Shovel
-   - Work with cluster nodes
-   - Many features support RabbitMQ API https://pulse.mozilla.org/api/
+* Users (Create, Read, Update, Delete)
+* User acess SHA256 + salt 
+* Permissions
+* Polices
+* Vhosts (Create, Read, Update, Delete)
+* Exchanges (Create, Read, Update, Delete)
+* Bindings (Create, Read, Update, Delete)
+* Queues (Create, Read, Update, Delete)
+* Shovel
+* Work with cluster nodes
+* Many features support RabbitMQ API https://pulse.mozilla.org/api/
 
 Install::
 
