@@ -1,5 +1,6 @@
-.. image:: https://travis-ci.org/deslum/pyrabbit2.svg?branch=master
-
+.. image:: https://travis-ci.org/deslum/pyrabbit2.svg?branch=master 
+.. image:: https://img.shields.io/badge/python-2-yellow.svg
+.. image:: https://img.shields.io/badge/python-3-blue.svg
 ==================
 PyRabbit2
 ==================
