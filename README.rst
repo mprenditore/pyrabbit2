@@ -1,3 +1,7 @@
+
+PyRabbit2
+-------------------
+
 .. image:: https://travis-ci.org/deslum/pyrabbit2.svg?branch=master
         :target: https://travis-ci.org/deslum/pyrabbit2
         
@@ -6,10 +10,6 @@
         
 .. image:: https://img.shields.io/badge/python-3.x-blue.svg
         :target: https://pypi.python.org/pypi/pyrabbit2/
-        
-==================
-PyRabbit2
-==================
 
 This project is fork project pyrabbit https://github.com/bkjones/pyrabbit 
 
