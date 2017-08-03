@@ -8,8 +8,11 @@ PyRabbit2
 .. image:: https://img.shields.io/badge/python-2.x-yellow.svg
         :target: https://pypi.python.org/pypi/pyrabbit2/
         
-.. image:: https://img.shields.io/badge/python-3.x-blue.svg
+.. image:: https://img.shields.io/badge/python-3.x-red.svg
         :target: https://pypi.python.org/pypi/pyrabbit2/
+
+.. image:: https://img.shields.io/badge/license-New%20BSD-blue.svg   
+        :target: https://raw.githubusercontent.com/deslum/pyrabbit2/master/LICENSE
 
 This project is fork project pyrabbit https://github.com/bkjones/pyrabbit 
 
