@@ -1,6 +1,12 @@
-.. image:: https://travis-ci.org/deslum/pyrabbit2.svg?branch=master 
-.. image:: https://img.shields.io/badge/python-2-yellow.svg
-.. image:: https://img.shields.io/badge/python-3-blue.svg
+.. image:: https://travis-ci.org/deslum/pyrabbit2.svg?branch=master
+        :target: https://travis-ci.org/deslum/pyrabbit2
+        
+.. image:: https://img.shields.io/badge/python-2.x-yellow.svg
+        :target: https://pypi.python.org/pypi/pyrabbit2/
+        
+.. image:: https://img.shields.io/badge/python-3.x-blue.svg
+        :target: https://pypi.python.org/pypi/pyrabbit2/
+        
 ==================
 PyRabbit2
 ==================
