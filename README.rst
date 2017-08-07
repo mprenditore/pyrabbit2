@@ -24,7 +24,8 @@ a pretty solid set of tests, and I use tox to test across Python versions.
 
 PyRabbit2 is on PyPI, which makes it installable using pip or easy_install.
 
-Support:
+Features:
+----------
 
 * Users (Create, Read, Update, Delete)
 * User acess SHA256 + salt 
@@ -38,12 +39,14 @@ Support:
 * Work with cluster nodes
 * Many features support RabbitMQ API https://pulse.mozilla.org/api/
 
-Install::
+Install
+-----------
+::
 
      pip3 install pyrabbit2
      
-     
-See the documentation at http://pyrabbit.readthedocs.org
 
-Please send pull requests! Pyrabbit doesn't yet provide 100% coverage of
-the exposed RabbitMQ API, so dig in! 
+Documentation
+--------------
+     
+http://pyrabbit.readthedocs.org
