@@ -848,7 +848,7 @@ class Client(object):
         :returns: boolean
         """
         path = Client.urls['users_by_name'] % username
-        body = json.dumps({'password_hash': password_hash, 'tags': tags})
+        body = json.dumps({'password_hash': password_hash, 'hashing_algorithm': 'rabbit_password_hashing_sha256', 'tags': tags})
         return self._call(path, 'PUT', body=body,
                                  headers=Client.json_headers)
 
