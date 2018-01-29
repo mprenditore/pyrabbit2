@@ -692,6 +692,13 @@ class Client(object):
 
         vhost = quote(vhost, '')
         base_body = {'count': count, 'requeue': requeue, 'encoding': encoding}
+
+        # 3.7.X now uses ackmode to denote the requeuing capability
+        if requeue:
+            base_body['ackmode'] = 'ack_requeue_true'
+        else:
+            base_body['ackmode'] = 'ack_requeue_false'
+
         if truncate:
             base_body['truncate'] = truncate
         body = json.dumps(base_body)
