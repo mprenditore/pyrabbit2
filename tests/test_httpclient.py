@@ -5,7 +5,7 @@ except ImportError:
 
 import sys
 sys.path.append('..')
-from pyrabbit import http
+from pyrabbit2 import http
 
 
 

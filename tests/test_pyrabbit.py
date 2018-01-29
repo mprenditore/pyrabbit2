@@ -15,16 +15,20 @@ sys.path.append('..')
 import pyrabbit2
 from mock import Mock, patch
 
+host_and_port = 'localhost:15672'
+user = 'guest'
+password = 'guest'
+
 class TestClient(unittest.TestCase):
     def setUp(self):
-        self.client = pyrabbit2.api.Client('localhost:15672', 'guest', 'guest')
+        self.client = pyrabbit2.api.Client(host_and_port, user, password)
 
     def tearDown(self):
         del self.client
 
     def test_server_init_200(self):
         self.assertIsInstance(self.client, pyrabbit2.api.Client)
-        self.assertEqual(self.client.api_url, 'localhost:15672')
+        self.assertEqual(self.client.api_url, host_and_port)
 
     def test_server_is_alive_default_vhost(self):
         response = {'status': 'ok'}
@@ -214,7 +218,7 @@ class TestClient(unittest.TestCase):
 
 class TestLiveServer(unittest.TestCase):
     def setUp(self):
-        self.rabbit = pyrabbit2.api.Client('localhost:15672', 'guest', 'guest')
+        self.rabbit = pyrabbit2.api.Client(host_and_port, user, password)
         self.vhost_name = 'pyrabbit_test_vhost'
         self.exchange_name = 'pyrabbit_test_exchange'
         self.queue_name = 'pyrabbit_test_queue'
@@ -285,7 +289,7 @@ class TestLiveServer(unittest.TestCase):
 class TestShovel(unittest.TestCase):
 
     def setUp(self):
-        self.rabbit = pyrabbit2.api.Client('localhost:15672', 'guest', 'guest')
+        self.rabbit = pyrabbit2.api.Client(host_and_port, user, password)
         self.vhost_name = '/'
         self.exchange_name = 'pyrabbit_test_exchange'
         self.queue_name = 'pyrabbit_test_queue'
