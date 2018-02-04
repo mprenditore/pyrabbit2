@@ -810,7 +810,7 @@ class Client(object):
         :param string exchange: the target exchange of the binding
         :param string queue: the queue to bind to the exchange
         :param string rt_key: the routing key to use for the binding
-        :param list args: extra arguments to associate w/ the binding.
+        :param dict args: extra arguments to associate w/ the binding.
         :returns: boolean
         """
 
