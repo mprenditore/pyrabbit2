@@ -692,13 +692,6 @@ class Client(object):
 
         vhost = quote(vhost, '')
         base_body = {'count': count, 'requeue': requeue, 'encoding': encoding}
-
-        # 3.7.X now uses ackmode to denote the requeuing capability
-        if requeue:
-            base_body['ackmode'] = 'ack_requeue_true'
-        else:
-            base_body['ackmode'] = 'ack_requeue_false'
-
         if truncate:
             base_body['truncate'] = truncate
         body = json.dumps(base_body)
@@ -845,17 +838,24 @@ class Client(object):
                                                                 rt_key)
         return self._call(path, 'DELETE', headers=Client.json_headers)
 
-    def create_user(self, username, password_hash, tags=""):
+    def create_user(self, username, password=None,password_hash=None, tags=""):
         """
         Creates a user.
-
+        
         :param string username: The name to give to the new user
-        :param string password: Password for the new user sha256 with salt see more http://www.rabbitmq.com/passwords.html#password-generation
+        :param string password: Plain text password
+        :param password_hash: Password for the new user sha256 with salt see more http://www.rabbitmq.com/passwords.html#password-generation
         :param string tags: Comma-separated list of tags for the user
         :returns: boolean
         """
         path = Client.urls['users_by_name'] % username
-        body = json.dumps({'password_hash': password_hash, 'hashing_algorithm': 'rabbit_password_hashing_sha256', 'tags': tags})
+        body = None
+        if bool(password):
+            body = json.dumps({'password': password, 'tags': tags})
+        elif bool(password_hash):
+            body = json.dumps({'password_hash': password_hash, 'tags': tags})
+        else:
+            raise APIError("password or password_hash should be present.")
         return self._call(path, 'PUT', body=body,
                                  headers=Client.json_headers)
 
