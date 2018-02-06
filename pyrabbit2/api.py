@@ -677,7 +677,6 @@ class Client(object):
                      requeue=False, truncate=None, encoding='auto'):
         """
         Gets <count> messages from the queue.
-
         :param string vhost: Name of vhost containing the queue
         :param string qname: Name of the queue to consume from
         :param int count: Number of messages to get.
@@ -810,7 +809,7 @@ class Client(object):
         :param string exchange: the target exchange of the binding
         :param string queue: the queue to bind to the exchange
         :param string rt_key: the routing key to use for the binding
-        :param list args: extra arguments to associate w/ the binding.
+        :param dict args: extra arguments to associate w/ the binding.
         :returns: boolean
         """
 
@@ -845,17 +844,24 @@ class Client(object):
                                                                 rt_key)
         return self._call(path, 'DELETE', headers=Client.json_headers)
 
-    def create_user(self, username, password_hash, tags=""):
+    def create_user(self, username, password=None,password_hash=None, tags=""):
         """
         Creates a user.
-
+        
         :param string username: The name to give to the new user
-        :param string password: Password for the new user sha256 with salt see more http://www.rabbitmq.com/passwords.html#password-generation
+        :param string password: Plain text password
+        :param password_hash: Password for the new user sha256 with salt see more http://www.rabbitmq.com/passwords.html#password-generation
         :param string tags: Comma-separated list of tags for the user
         :returns: boolean
         """
         path = Client.urls['users_by_name'] % username
-        body = json.dumps({'password_hash': password_hash, 'hashing_algorithm': 'rabbit_password_hashing_sha256', 'tags': tags})
+        body = None
+        if bool(password):
+            body = json.dumps({'password': password, 'tags': tags})
+        elif bool(password_hash):
+            body = json.dumps({'password_hash': password_hash, 'hashing_algorithm': 'rabbit_password_hashing_sha256', 'tags': tags})
+        else:
+            raise APIError("password or password_hash should be present.")
         return self._call(path, 'PUT', body=body,
                                  headers=Client.json_headers)
 
