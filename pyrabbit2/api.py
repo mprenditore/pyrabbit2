@@ -677,7 +677,6 @@ class Client(object):
                      requeue=False, truncate=None, encoding='auto'):
         """
         Gets <count> messages from the queue.
-
         :param string vhost: Name of vhost containing the queue
         :param string qname: Name of the queue to consume from
         :param int count: Number of messages to get.
@@ -692,6 +691,13 @@ class Client(object):
 
         vhost = quote(vhost, '')
         base_body = {'count': count, 'requeue': requeue, 'encoding': encoding}
+
+        # 3.7.X now uses ackmode to denote the requeuing capability
+        if requeue:
+            base_body['ackmode'] = 'ack_requeue_true'
+        else:
+            base_body['ackmode'] = 'ack_requeue_false'
+
         if truncate:
             base_body['truncate'] = truncate
         body = json.dumps(base_body)
@@ -853,7 +859,7 @@ class Client(object):
         if bool(password):
             body = json.dumps({'password': password, 'tags': tags})
         elif bool(password_hash):
-            body = json.dumps({'password_hash': password_hash, 'tags': tags})
+            body = json.dumps({'password_hash': password_hash, 'hashing_algorithm': 'rabbit_password_hashing_sha256', 'tags': tags})
         else:
             raise APIError("password or password_hash should be present.")
         return self._call(path, 'PUT', body=body,
