@@ -19,7 +19,7 @@ This project is fork project pyrabbit https://github.com/bkjones/pyrabbit
 I fork project, because he don't update many years.
 
 Pyrabbit2 is a module to make it easy to interface w/ RabbitMQ's HTTP Management
-API.  It's tested against RabbitMQ 3.6.10 using Python 2.7-3.6. It has
+API.  It's tested against RabbitMQ 3.7.4 using Python 2.7-3.6. It has
 a pretty solid set of tests, and I use tox to test across Python versions.
 
 PyRabbit2 is on PyPI, which makes it installable using pip or easy_install.
