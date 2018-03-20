@@ -31,6 +31,7 @@ Features:
 * User acess SHA256 + salt 
 * Permissions
 * Polices
+* Support SSL
 * Vhosts (Create, Read, Update, Delete)
 * Exchanges (Create, Read, Update, Delete)
 * Bindings (Create, Read, Update, Delete)
