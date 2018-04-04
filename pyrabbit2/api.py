@@ -5,7 +5,7 @@ decorators used by the class.
 """
 
 from . import http
-import functools
+# import functools  # UNUSED
 import json
 try:
     # python 2.x
@@ -898,7 +898,7 @@ class Client(object):
         vhost = quote(vhost, '')
         exchange = quote(exchange, '')
         queue = quote(queue, '')
-        body = ''
+        # body = ''  # UNUSED
         path = Client.urls['rt_bindings_between_exch_queue'] % (vhost,
                                                                 exchange,
                                                                 queue,
