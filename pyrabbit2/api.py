@@ -5,7 +5,7 @@ decorators used by the class.
 """
 
 from . import http
-import functools
+# import functools  # UNUSED
 import json
 try:
     # python 2.x
@@ -16,6 +16,7 @@ except ImportError:
 
 
 class APIError(Exception):
+
     """Denotes a failure due to unexpected or invalid
     input/output between the client and the API
 
@@ -24,6 +25,7 @@ class APIError(Exception):
 
 
 class PermissionError(Exception):
+
     """
     Raised if the operation requires admin permissions, and the user used to
     instantiate the Client class does not have admin privileges.
@@ -32,6 +34,7 @@ class PermissionError(Exception):
 
 
 class Client(object):
+
     """
     Abstraction of the RabbitMQ Management HTTP API.
 
@@ -71,10 +74,12 @@ class Client(object):
             'vhost_permissions_get': 'vhosts/%s/permissions',
             'shovel': 'parameters/shovel/%s/%s',
             'all_shovels':  'parameters/shovel',
+            'policy': 'policies/%s/%s',
+            'all_policies':  'policies',
             'definitions': 'definitions',
             'extensions': 'extensions',
             'cluster-name': 'cluster-name',
-    }
+            }
 
     json_headers = {"content-type": "application/json"}
 
@@ -122,7 +127,7 @@ class Client(object):
         """
         Create a shovel on a given vhost.
 
-        :param string vhost: virtual host where working shovel 
+        :param string vhost: virtual host where working shovel
         :param string shovel_name: shovel name
         :returns: boolean
         """
@@ -163,7 +168,7 @@ class Client(object):
 
         :param string vhost: shovel's vhost
         :param string shovel_name: name shovel
-        :params dict shovel params 
+        :params dict shovel params
         example {"src-uri":"amqp://admin:admin@rabbit.test.com:5672","src-queue":"test_queue","dest-uri":"amqp://test1:test1@rabbit2.test.com:5672","dest-queue":"test_queue","prefetch-count":500,"reconnect-delay":1,"add-forward-headers":false,"ack-mode":"on-confirm","delete-after":"never"}
         :returns: http_code
         """
@@ -174,6 +179,62 @@ class Client(object):
         path = Client.urls['shovel'] % (vhost, shovel_name)
         shovel = self._call(path, 'PUT', body=body, headers=Client.json_headers)
         return shovel
+
+    def get_policy(self, vhost, policy_name):
+        """
+        Create a policy on a given vhost.
+
+        :param string vhost: virtual host where working shovel
+        :param string policy_name: policy name
+        :returns: boolean
+        """
+        vhost = quote(vhost, '')
+        policy_name = quote(policy_name, '')
+        path = Client.urls['policy'] % (vhost, policy_name)
+        policy = self._call(path, 'GET')
+        return policy
+
+    def get_all_policies(self):
+        """
+        Get all policies on a given server.
+        :returns: list all policies
+        """
+        path = Client.urls['all_policies']
+        policies = self._call(path, 'GET')
+        if not policies:
+            policies = list()
+        return policies
+
+    def delete_policy(self, vhost, policy_name):
+        """
+        Delete policy by vhost and policy_name.
+
+        :param string vhost: vhost hosing the policy
+        :param string policy_name: deleting policy name
+        :returns: boolean
+        """
+        vhost = quote(vhost, '')
+        policy_name = quote(policy_name, '')
+        path = Client.urls['policy'] % (vhost, policy_name)
+        policy = self._call(path, 'DELETE')
+        return policy
+
+    def create_policy(self, vhost, policy_name, **kwargs):
+        """
+        Create policy. https://www.rabbitmq.com/parameters.html
+
+        :param string vhost: policy's vhost
+        :param string policy_name: name policy
+        :params dict policy params
+        example {"pattern": "^hf\.", "definition": {"federation-upstream-set":"all", "ha-mode": "all"}, "priority": 1, "apply-to": "queues"}
+        :returns: http_code
+        """
+        vhost = quote(vhost, '')
+        policy_name = quote(policy_name, '')
+        body = json.dumps(kwargs)
+        path = Client.urls['policy'] % (vhost, policy_name)
+        policy = self._call(path, 'PUT', body=body, headers=Client.json_headers)
+        return policy
 
     def is_alive(self, vhost='%2F'):
         """
@@ -252,7 +313,7 @@ class Client(object):
         return users
 
     ################################################
-    ###         VHOSTS
+    #           VHOSTS
     ################################################
     def get_all_vhosts(self):
         """
@@ -300,7 +361,7 @@ class Client(object):
         vname = quote(vname, '')
         path = Client.urls['vhosts_by_name'] % vname
         return self._call(path, 'PUT',
-                                 headers=Client.json_headers)
+                          headers=Client.json_headers)
 
     def delete_vhost(self, vname):
         """
@@ -314,7 +375,7 @@ class Client(object):
         return self._call(path, 'DELETE')
 
     ###############################################
-    ##           PERMISSIONS
+    #            PERMISSIONS
     ###############################################
     def get_permissions(self):
         """
@@ -369,7 +430,7 @@ class Client(object):
         body = json.dumps({"configure": config, "read": rd, "write": wr})
         path = Client.urls['vhost_permissions'] % (vname, username)
         return self._call(path, 'PUT', body,
-                                 headers=Client.json_headers)
+                          headers=Client.json_headers)
 
     def delete_permission(self, vname, username):
         """
@@ -395,7 +456,7 @@ class Client(object):
         return self._call(path, 'GET')
 
     ###############################################
-    ##           EXCHANGES
+    #            EXCHANGES
     ###############################################
     def get_exchanges(self, vhost=None):
         """
@@ -473,7 +534,7 @@ class Client(object):
 
         body = json.dumps(base_body)
         self._call(path, 'PUT', body,
-                          headers=Client.json_headers)
+                   headers=Client.json_headers)
         return True
 
     def publish(self, vhost, xname, rt_key, payload, payload_enc='string',
@@ -516,7 +577,7 @@ class Client(object):
         return True
 
     #############################################
-    ##              QUEUES
+    #               QUEUES
     #############################################
     def get_queues(self, vhost=None):
         """
@@ -654,9 +715,9 @@ class Client(object):
         body = json.dumps(kwargs)
 
         return self._call(path,
-                                 'PUT',
-                                 body,
-                                 headers=Client.json_headers)
+                          'PUT',
+                          body,
+                          headers=Client.json_headers)
 
     def delete_queue(self, vhost, qname):
         """
@@ -705,7 +766,7 @@ class Client(object):
         qname = quote(qname, '')
         path = Client.urls['get_from_queue'] % (vhost, qname)
         messages = self._call(path, 'POST', body,
-                                     headers=Client.json_headers)
+                              headers=Client.json_headers)
         return messages
 
     #########################################
@@ -821,7 +882,7 @@ class Client(object):
                                                              exchange,
                                                              queue)
         binding = self._call(path, 'POST', body=body,
-                                    headers=Client.json_headers)
+                             headers=Client.json_headers)
         return binding
 
     def delete_binding(self, vhost, exchange, queue, rt_key):
@@ -837,17 +898,17 @@ class Client(object):
         vhost = quote(vhost, '')
         exchange = quote(exchange, '')
         queue = quote(queue, '')
-        body = ''
+        # body = ''  # UNUSED
         path = Client.urls['rt_bindings_between_exch_queue'] % (vhost,
                                                                 exchange,
                                                                 queue,
                                                                 rt_key)
         return self._call(path, 'DELETE', headers=Client.json_headers)
 
-    def create_user(self, username, password=None,password_hash=None, tags=""):
+    def create_user(self, username, password=None, password_hash=None, tags=""):
         """
         Creates a user.
-        
+
         :param string username: The name to give to the new user
         :param string password: Plain text password
         :param password_hash: Password for the new user sha256 with salt see more http://www.rabbitmq.com/passwords.html#password-generation
@@ -863,7 +924,7 @@ class Client(object):
         else:
             raise APIError("password or password_hash should be present.")
         return self._call(path, 'PUT', body=body,
-                                 headers=Client.json_headers)
+                          headers=Client.json_headers)
 
     def delete_user(self, username):
         """
@@ -874,7 +935,6 @@ class Client(object):
         path = Client.urls['users_by_name'] % username
         return self._call(path, 'DELETE')
 
-
     def get_definitions(self):
         """
         The server definitions - exchanges, queues, bindings, users, virtual hosts, permissions and parameters.
@@ -884,15 +944,13 @@ class Client(object):
         path = Client.urls['definitions']
         return self._call(path, 'GET')
 
-
     def get_extensions(self):
         """
-        A list of extensions to the management plugin.        
+        A list of extensions to the management plugin.
         :return: list dicts Example: [{"javascript":"tracing.js"},{"javascript":"shovel.js"},{"javascript":"dispatcher.js"}]
         """
         path = Client.urls['extensions']
         return self._call(path, 'GET')
-
 
     def get_cluster_name(self):
         """
