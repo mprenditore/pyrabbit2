@@ -83,7 +83,8 @@ class Client(object):
 
     json_headers = {"content-type": "application/json"}
 
-    def __init__(self, api_url, user, passwd, timeout=5, scheme='http'):
+    def __init__(self, api_url, user, passwd, timeout=5, scheme='http',
+                 verify=True, cert=None):
         """
         :param string api_url: base url for the broker API
         :param string user: Username used to authenticate to the API.
@@ -99,12 +100,16 @@ class Client(object):
         self.passwd = passwd
         self.timeout = timeout
         self.scheme = scheme
+        self.verify = verify
+        self.cert = cert
         self.http = http.HTTPClient(
             self.api_url,
             self.user,
             self.passwd,
-            self.timeout,
-            self.scheme
+            timeout=self.timeout,
+            scheme=self.scheme,
+            verify=self.verify,
+            cert=self.cert
         )
 
         return
