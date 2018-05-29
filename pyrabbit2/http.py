@@ -10,14 +10,16 @@ try:
 except ImportError:
     from urllib.parse import urljoin, urlparse, urlunparse
 
+
 class HTTPError(Exception):
     """
     An error response from the API server. This should be an
     HTTP error of some kind (404, 500, etc).
 
     """
+
     def __init__(self, content, status=None, reason=None, path=None, body=None):
-        #HTTP status code
+        # HTTP status code
         self.status = status
         # human readable HTTP status
         self.reason = reason
@@ -26,15 +28,15 @@ class HTTPError(Exception):
         self.detail = None
 
         # Actual, useful reason for failure returned by RabbitMQ
-        self.detail=None
+        self.detail = None
         if content and content.get('reason'):
             self.detail = content['reason']
 
         self.output = "%s - %s (%s) (%s) (%s)" % (self.status,
-                                             self.reason,
-                                             self.detail,
-                                             self.path,
-                                             repr(self.body))
+                                                  self.reason,
+                                                  self.detail,
+                                                  self.path,
+                                                  repr(self.body))
 
     def __str__(self):
         return self.output
@@ -69,7 +71,7 @@ class HTTPClient(object):
         api_url = '%s://%s/api/' % (scheme, api_url)
         self.base_url = api_url
 
-    def do_call(self, path, method, body=None, headers=None):
+    def do_call(self, path, method, body=None, headers=None, verify=True):
         """
         Send an HTTP request to the REST API.
 
@@ -80,12 +82,14 @@ class HTTPClient(object):
             body of the HTTP request.
         :param dictionary headers:
             "{header-name: header-value}" dictionary.
+        :param bool verify: A bool to choose if verify the SSL certificate
 
         """
         url = urljoin(self.base_url, path)
         try:
             resp = requests.request(method, url, data=body, headers=headers,
-                                    auth=self.auth, timeout=self.timeout)
+                                    auth=self.auth, timeout=self.timeout,
+                                    verify=verify)
         except requests.exceptions.Timeout as out:
             raise NetworkError("Timeout while trying to connect to RabbitMQ")
         except requests.exceptions.RequestException as err:

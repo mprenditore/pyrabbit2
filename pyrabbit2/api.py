@@ -83,13 +83,14 @@ class Client(object):
 
     json_headers = {"content-type": "application/json"}
 
-    def __init__(self, api_url, user, passwd, timeout=5, scheme='http'):
+    def __init__(self, api_url, user, passwd, timeout=5, scheme='http', verify=True):
         """
         :param string api_url: base url for the broker API
         :param string user: Username used to authenticate to the API.
         :param string passwd: Password used to authenticate to the API.
         :param int timeout: Integer number of seconds to wait for each call.
         :param string scheme: HTTP scheme used to make the connection
+        :param bool verify: A bool to choose if verify the SSL certificate
 
         Populates server attributes using passed-in parameters and
         the HTTP API's 'overview' information.
@@ -99,6 +100,7 @@ class Client(object):
         self.passwd = passwd
         self.timeout = timeout
         self.scheme = scheme
+        self.verify = verify
         self.http = http.HTTPClient(
             self.api_url,
             self.user,
@@ -115,11 +117,11 @@ class Client(object):
         our own exceptions
         """
         try:
-            resp = self.http.do_call(path, method, body, headers)
+            resp = self.http.do_call(path, method, body, headers, self.verify)
         except http.HTTPError as err:
             if err.status == 401:
                 raise PermissionError('Insufficient permissions to query ' +
-                    '%s with user %s :%s' % (path, self.user, err))
+                                      '%s with user %s :%s' % (path, self.user, err))
             raise
         return resp
 
@@ -177,7 +179,8 @@ class Client(object):
         shovel_name = quote(shovel_name, '')
         body = json.dumps(params)
         path = Client.urls['shovel'] % (vhost, shovel_name)
-        shovel = self._call(path, 'PUT', body=body, headers=Client.json_headers)
+        shovel = self._call(path, 'PUT', body=body,
+                            headers=Client.json_headers)
         return shovel
 
     def get_policy(self, vhost, policy_name):
@@ -233,7 +236,8 @@ class Client(object):
         policy_name = quote(policy_name, '')
         body = json.dumps(kwargs)
         path = Client.urls['policy'] % (vhost, policy_name)
-        policy = self._call(path, 'PUT', body=body, headers=Client.json_headers)
+        policy = self._call(path, 'PUT', body=body,
+                            headers=Client.json_headers)
         return policy
 
     def is_alive(self, vhost='%2F'):
@@ -920,7 +924,8 @@ class Client(object):
         if bool(password):
             body = json.dumps({'password': password, 'tags': tags})
         elif bool(password_hash):
-            body = json.dumps({'password_hash': password_hash, 'hashing_algorithm': 'rabbit_password_hashing_sha256', 'tags': tags})
+            body = json.dumps({'password_hash': password_hash,
+                               'hashing_algorithm': 'rabbit_password_hashing_sha256', 'tags': tags})
         else:
             raise APIError("password or password_hash should be present.")
         return self._call(path, 'PUT', body=body,
